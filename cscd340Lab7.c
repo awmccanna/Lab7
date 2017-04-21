@@ -43,21 +43,27 @@ int main()
 			clean(preCount, prePipe);
 			clean(postCount, postPipe);
 		}// end if pipeCount
-		else if(1)
+		if(strlen(s) >= 2)
 		{
-			//TODO change dir using chdir("directory")
+			if(s[0] == 'c' && s[1] == 'd')
+			{
+				
+			}
 		}
-		else if(1)
+		else if((strstr(s, "<") != NULL) || (strstr(s, ">") != NULL))
 		{
-			//TODO alias stuff here
+			printf("Redirection found\n");
+			//TODO redir
 		}
-		else if(1)
+		if(strstr(s, "history") != NULL)
         {
+			printf("Found history\n");
             //TODO History
         }
-        else if(1)
+        if(strstr(s, "alias") != NULL)
         {
-            //TODO redirecting
+			printf("Found alias\n");
+            //TODO alias stuff here
         }
 
 		else
