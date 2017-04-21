@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../tokenize/makeArgs.h"
 
 #define MAX 100
 
@@ -41,5 +42,22 @@ int menu();
  * @warning - The passed in pointer is checked - exit(-99) if NULL
  */
 void strip(char *array);
+
+
+/**
+ * Opens the ushrc file if it exists. If it does not exist, NULL is returned and will be
+ * handled in the main().
+ * @return FILE *
+ */
+FILE * openRC();
+
+
+/**
+ * Called to read in HISTCOUNT and HISTFILECOUNT from .ushrc
+ * @param fin
+ * @param histCount
+ * @param histFileCount
+ */
+void getCounts(FILE * fin, int * histCount, int * histFileCount);
 
 #endif
