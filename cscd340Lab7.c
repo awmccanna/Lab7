@@ -5,6 +5,7 @@
 #include "./utils/myUtils.h"
 #include "./process/process.h"
 #include "./tokenize/makeArgs.h"
+#include "./changeDir/changeDir.h"
 
 int main()
 {
@@ -55,7 +56,7 @@ int main()
 		{
 			if(s[0] == 'c' && s[1] == 'd')
 			{
-				
+				cd(s);
 			}
 		}
 		if((strstr(s, "<") != NULL) || (strstr(s, ">") != NULL))
