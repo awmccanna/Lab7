@@ -36,13 +36,21 @@ int main()
 		pipeCount = containsPipe(s);
 		if(pipeCount > 0)
 		{
-
 			postPipe = parsePostPipe(s, &postCount);
 			prePipe = parsePrePipe(s, &preCount);
 			pipeIt(prePipe, postPipe);
 			clean(preCount, prePipe);
 			clean(postCount, postPipe);
 		}// end if pipeCount
+        else
+        {
+            argc = makeargs(s, &argv);
+            if(argc != -1)
+                forkIt(argv);
+
+            clean(argc, argv);
+            argv = NULL;
+        }
 		if(strlen(s) >= 2)
 		{
 			if(s[0] == 'c' && s[1] == 'd')
@@ -50,7 +58,7 @@ int main()
 				
 			}
 		}
-		else if((strstr(s, "<") != NULL) || (strstr(s, ">") != NULL))
+		if((strstr(s, "<") != NULL) || (strstr(s, ">") != NULL))
 		{
 			printf("Redirection found\n");
 			//TODO redir
@@ -66,15 +74,6 @@ int main()
             //TODO alias stuff here
         }
 
-		else
-		{
-			argc = makeargs(s, &argv);
-			if(argc != -1)
-				forkIt(argv);
-
-			clean(argc, argv);
-			argv = NULL;
-		}
 
 		printf("command?: ");
 		fgets(s, MAX, stdin);
