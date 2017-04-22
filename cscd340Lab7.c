@@ -10,7 +10,7 @@
 int main()
 {
 	int argc, pipeCount, HISTCOUNT, HISTFILECOUNT;
-	char **argv = NULL, s[MAX];
+	char **argv = NULL, s[MAX], copy[MAX];
 	int preCount = 0, postCount = 0;
 	char ** prePipe = NULL, ** postPipe = NULL;
 	FILE * fin = openRC();
@@ -30,46 +30,51 @@ int main()
 
 	printf("command?: ");
 	fgets(s, MAX, stdin);
+    strcpy(copy, s);
 	strip(s);
+    strip(copy);
 
 	while(strcmp(s, "exit") != 0)
 	{
 		pipeCount = containsPipe(s);
+
 		if(pipeCount > 0)
 		{
-			postPipe = parsePostPipe(s, &postCount);
-			prePipe = parsePrePipe(s, &preCount);
+            strcpy(copy, s);
+			postPipe = parsePostPipe(copy, &postCount);
+			prePipe = parsePrePipe(copy, &preCount);
 			pipeIt(prePipe, postPipe);
 			clean(preCount, prePipe);
 			clean(postCount, postPipe);
 		}// end if pipeCount
         else
         {
-            argc = makeargs(s, &argv);
+            strcpy(copy, s);
+            argc = makeargs(copy, &argv);
             if(argc != -1)
                 forkIt(argv);
 
             clean(argc, argv);
             argv = NULL;
         }
-		if(strlen(s) >= 2)
+		if(strlen(copy) >= 2)
 		{
-			if(s[0] == 'c' && s[1] == 'd')
+			if(copy[0] == 'c' && copy[1] == 'd')
 			{
-				cd(s);
+				cd(copy);
 			}
 		}
-		if((strstr(s, "<") != NULL) || (strstr(s, ">") != NULL))
+		if((strstr(copy, "<") != NULL) || (strstr(copy, ">") != NULL))
 		{
 			printf("Redirection found\n");
 			//TODO redir
 		}
-		if(strstr(s, "history") != NULL)
+		if(strstr(copy, "history") != NULL)
         {
 			printf("Found history\n");
             //TODO History
         }
-        if(strstr(s, "alias") != NULL)
+        if(strstr(copy, "alias") != NULL)
         {
 			printf("Found alias\n");
             //TODO alias stuff here
@@ -78,7 +83,9 @@ int main()
 
 		printf("command?: ");
 		fgets(s, MAX, stdin);
-		strip(s);
+        strcpy(copy, s);
+        strip(s);
+        strip(copy);
 
 	}// end while
 
