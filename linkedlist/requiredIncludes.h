@@ -8,8 +8,6 @@
 #ifndef REQUIREDINCLUDES_H
 #define REQUIREDINCLUDES_H
 
-#include "../movies/actor.h"
-#include "../movies/movie.h"
-#include "../words/word.h"
+#include "../history/history.h"
 
 #endif /* REQUIREDINCLUDES_H */

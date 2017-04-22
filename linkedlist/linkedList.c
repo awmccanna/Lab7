@@ -1,7 +1,7 @@
 //
 // Created by awmccanna on 4/10/17.
 //
-#include <string.h>
+
 #include "linkedList.h"
 
 
@@ -9,6 +9,9 @@ LinkedList * linkedList()
 {
 	LinkedList * myList = (LinkedList *) calloc(1, sizeof(LinkedList));
 	myList->head = (Node *) calloc(1, sizeof(Node));
+	myList->tail = (Node *) calloc(1, sizeof(Node));
+	myList->head->next = myList->tail;
+	myList->tail->prev = myList->head;
 	return myList;
 }
 
@@ -19,15 +22,11 @@ void addLast(LinkedList * theList, Node * nn)
 		perror("NULL value passed into addFirst()");
 		exit(-99);
 	}
-	Node * cur = theList->head;
 
-	while(cur->next!= NULL)
-	{
-		cur = cur->next;
-	}
-
-	cur->next = nn;
-	nn->prev = cur;
+	nn->prev = theList->tail->prev;
+	nn->next = theList->tail;
+	nn->prev->next = nn;
+	theList->tail->prev = nn;
 
 	theList->size++;
 
@@ -44,18 +43,11 @@ void addFirst(LinkedList* theList, Node * nn)
 		exit(-99);
 	}
 
-	if(theList->head->next != NULL)
-	{
-		nn->prev = theList->head;
-		nn->next = theList->head->next;
-		nn->next->prev = nn;
-		theList->head->next = nn;
-	}
-	else
-	{
-		nn->prev = theList->head;
-		theList->head->next = nn;
-	}
+	nn->prev = theList->head;
+	nn->next = theList->head->next;
+	nn->next->prev = nn;
+	theList->head->next = nn;
+
 
 	theList->size++;
 
@@ -165,11 +157,12 @@ void clearList(LinkedList * theList, void (*removeData)(void *))
 {
 	if (theList != NULL)
 	{
-		while (theList->head->next != NULL)
+		while (theList->head->next != theList->tail)
 		{
 			removeFirst(theList, removeData);
 		}
 		free(theList->head);
+		free(theList->tail);
 	}
 }
 

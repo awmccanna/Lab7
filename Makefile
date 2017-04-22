@@ -2,8 +2,8 @@ CC=gcc
 FLAGS= -g
 
 
-lab7:	cscd340Lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./changeDir/changeDir.o ./linkedlist/linkedList.o ./linkedlist/listUtils.o 
-	${CC} ${FLAGS} cscd340Lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./changeDir/changeDir.o ./linkedlist/linkedList.o ./linkedlist/listUtils.o -o lab7
+lab7:	cscd340Lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./changeDir/changeDir.o ./linkedlist/linkedList.o ./linkedlist/listUtils.o ./history/history.o
+	${CC} ${FLAGS} cscd340Lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./changeDir/changeDir.o ./linkedlist/linkedList.o ./linkedlist/listUtils.o ./history/history.o -o lab7
 
 makeArgs.o:	./tokenize/makeArgs.c ./tokenize/makeArgs.h
 	${CC} ${FLAGS} -c ./tokenize/makeArgs.c
@@ -26,6 +26,9 @@ listUtils.o:	./linkedlist/listUtils.c listUtils.h
 linkedList.o:	./linkedlist/linkedList.h ./linkedlist/linkedList.c ./linkedlist/requiredIncludes.h
 	${CC} ${FLAGS} -c ./linkedlist/linkedList.c
 
+history.o: 	./history/history.h ./history/history.c
+	${CC} ${FLAGS} -c ./history/history.c
+
 clean:
 	rm ./pipes/pipes.o	
 	rm ./utils/myUtils.o
@@ -34,5 +37,6 @@ clean:
 	rm ./changeDir/changeDir.o
 	rm ./linkedlist/linkedList.o
 	rm ./linkedlist/listUtils.o
+	rm ./history/history.o
 	rm lab7
 

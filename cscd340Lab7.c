@@ -8,7 +8,8 @@
 #include "./changeDir/changeDir.h"
 #include "./linkedlist/linkedList.h"
 #include "./linkedlist/listUtils.h"
-
+#include "./history/history.h"
+#include "./linkedlist/requiredIncludes.h"
 
 
 int main()
@@ -17,6 +18,7 @@ int main()
 	char **argv = NULL, s[MAX], copy[MAX], pipeCopy[MAX];
 	int preCount = 0, postCount = 0;
 	char ** prePipe = NULL, ** postPipe = NULL;
+    LinkedList *history = linkedList();
 	FILE * fin = openRC();
 	if(fin == NULL)
 	{
@@ -96,6 +98,8 @@ int main()
 
 	}// end while
 
+    clearList(history, cleanTypeHistory);
+    free(history);
 	return 0;
 
 }// end main
