@@ -43,6 +43,7 @@ typedef struct node Node;
 struct linkedlist
 {
     Node * head;
+    Node * tail;
     int size;
 };
 typedef struct linkedlist LinkedList;

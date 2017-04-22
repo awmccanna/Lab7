@@ -6,13 +6,15 @@
 #include "./process/process.h"
 #include "./tokenize/makeArgs.h"
 #include "./changeDir/changeDir.h"
+#include "./linkedlist/linkedList.h"
+#include "./linkedlist/listUtils.h"
 
 
 
 int main()
 {
 	int argc, pipeCount, HISTCOUNT, HISTFILECOUNT;
-	char **argv = NULL, s[MAX], copy[MAX];
+	char **argv = NULL, s[MAX], copy[MAX], pipeCopy[MAX];
 	int preCount = 0, postCount = 0;
 	char ** prePipe = NULL, ** postPipe = NULL;
 	FILE * fin = openRC();
@@ -33,26 +35,27 @@ int main()
 	printf("command?: ");
 	fgets(s, MAX, stdin);
     strcpy(copy, s);
+    strcpy(pipeCopy, s);
 	strip(s);
     strip(copy);
+    strip(pipeCopy);
 
 	while(strcmp(s, "exit") != 0)
 	{
-		pipeCount = containsPipe(s);
+		pipeCount = containsPipe(pipeCopy);
 
 		if(pipeCount > 0)
 		{
-            strcpy(copy, s);
-			postPipe = parsePostPipe(copy, &postCount);
-			prePipe = parsePrePipe(copy, &preCount);
+
+			postPipe = parsePostPipe(pipeCopy, &postCount);
+			prePipe = parsePrePipe(pipeCopy, &preCount);
 			pipeIt(prePipe, postPipe);
 			clean(preCount, prePipe);
 			clean(postCount, postPipe);
 		}// end if pipeCount
         else
         {
-            strcpy(copy, s);
-            argc = makeargs(copy, &argv);
+            argc = makeargs(pipeCopy, &argv);
             if(argc != -1)
                 forkIt(argv);
 
@@ -86,8 +89,10 @@ int main()
 		printf("command?: ");
 		fgets(s, MAX, stdin);
         strcpy(copy, s);
+        strcpy(pipeCopy, s);
         strip(s);
         strip(copy);
+        strip(pipeCopy);
 
 	}// end while
 
