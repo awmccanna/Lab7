@@ -5,10 +5,9 @@
 #include "listUtils.h"
 
 
-Node * buildNode(FILE * fin, void *(*buildData)(FILE * in) )
+Node * buildNode(char * hist, void *(*buildData)(char * in) )
 {
-
-	Node * nn = buildNode_Type(buildData(fin));
+	Node * nn = buildNode_Type(buildData(hist));
 	return nn;
 }
 
@@ -50,7 +49,7 @@ void sort(LinkedList * theList, int (*compare)(const void *, const void *))
 
 }
 
-void buildListTotal(LinkedList * myList, int total, FILE * fin, void * (*buildData)(FILE * in))
+void buildListTotal(LinkedList * myList, int total, char * fin, void * (*buildData)(char * in))
 {
     if(myList == NULL)
     {

@@ -18,7 +18,7 @@ int main()
 	char **argv = NULL, s[MAX], copy[MAX], pipeCopy[MAX];
 	int preCount = 0, postCount = 0;
 	char ** prePipe = NULL, ** postPipe = NULL;
-    LinkedList *history = linkedList();
+	LinkedList *history = linkedList();
 	FILE * fin = openRC();
 	if(fin == NULL)
 	{
@@ -36,17 +36,36 @@ int main()
 
 	printf("command?: ");
 	fgets(s, MAX, stdin);
-    strcpy(copy, s);
-    strcpy(pipeCopy, s);
+	strcpy(copy, s);
+	strcpy(pipeCopy, s);
 	strip(s);
-    strip(copy);
-    strip(pipeCopy);
+	strip(copy);
+	strip(pipeCopy);
+
+
+	//Add to history part here
+
+
+    char addHist[MAX];
+    strcpy(addHist, s);
+    strip(addHist);
+    addLast(history, buildNode(addHist, buildTypeHistory));
+
+
+
+
+
+
+
+
+
+
 
 	while(strcmp(s, "exit") != 0)
 	{
 		pipeCount = containsPipe(pipeCopy);
 
-		if(pipeCount > 0)
+		if (pipeCount > 0)
 		{
 
 			postPipe = parsePostPipe(pipeCopy, &postCount);
@@ -55,53 +74,102 @@ int main()
 			clean(preCount, prePipe);
 			clean(postCount, postPipe);
 		}// end if pipeCount
-        else
-        {
-            argc = makeargs(pipeCopy, &argv);
-            if(argc != -1)
-                forkIt(argv);
+		else {
+			argc = makeargs(pipeCopy, &argv);
+			if (argc != -1)
+				forkIt(argv);
 
-            clean(argc, argv);
-            argv = NULL;
-        }
-		if(strlen(copy) >= 2)
+			clean(argc, argv);
+			argv = NULL;
+		}
+		if (strlen(copy) >= 2)
 		{
-			if(copy[0] == 'c' && copy[1] == 'd')
-			{
+			if (copy[0] == 'c' && copy[1] == 'd') {
 				cd(copy);
 			}
 		}
-		if((strstr(copy, "<") != NULL) || (strstr(copy, ">") != NULL))
+		if ((strstr(copy, "<") != NULL) || (strstr(copy, ">") != NULL))
 		{
 			printf("Redirection found\n");
 			//TODO redir
 		}
-		if(strstr(copy, "history") != NULL)
-        {
+		if (strstr(copy, "history") != NULL)
+		{
 			printf("Found history\n");
-            //TODO History
-        }
-        if(strstr(copy, "alias") != NULL)
-        {
+            printList(history, printTypeHistory, HISTCOUNT);
+
+		}
+		if (strstr(copy, "alias") != NULL)
+		{
 			printf("Found alias\n");
-            //TODO alias stuff here
-        }
+			//TODO alias stuff here
+		}
 
 
 		printf("command?: ");
 		fgets(s, MAX, stdin);
-        strcpy(copy, s);
-        strcpy(pipeCopy, s);
-        strip(s);
-        strip(copy);
-        strip(pipeCopy);
+		strcpy(copy, s);
+		strcpy(pipeCopy, s);
+		strip(s);
+		strip(copy);
+		strip(pipeCopy);
 
-	}// end while
+		if (history->tail->prev->data != NULL)
+		{
+			char addHist[MAX];
+			History *curHist = (History *) history->tail->prev->data;
+			strcpy(addHist, s);
+			strip(addHist);
+			if (strcmp(addHist, curHist->command) != 0)
+			{
+				addLast(history, buildNode(addHist, buildTypeHistory));
+			}
 
-    clearList(history, cleanTypeHistory);
-    free(history);
+		}// end while
+	}
+	clearList(history, cleanTypeHistory);
+	free(history);
 	return 0;
 
 }// end main
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

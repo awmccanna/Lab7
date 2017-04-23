@@ -4,6 +4,7 @@
 
 #include "history.h"
 
+
 void cleanTypeHistory(void * ptr)
 {
     if(ptr == NULL)
@@ -28,12 +29,14 @@ void cleanTypeHistory(void * ptr)
 
 
 
-void buildTypeHistory(char * com, char ** tCom, int numCom)
+void * buildTypeHistory(char * com)
 {
+    History * toReturn = (History *) calloc(1, sizeof(History));
+    toReturn->command = (char *) calloc(strlen(com), sizeof(char));
+    strcpy(toReturn->command, com);
+    toReturn->num = makeargs(com, &toReturn->tokCommand);
 
-
-
-
+    return (void *) toReturn;
 }
 
 
@@ -43,5 +46,5 @@ void buildTypeHistory(char * com, char ** tCom, int numCom)
 void printTypeHistory(void * passedIn)
 {
     History * temp = (History *) passedIn;
-    printf("%d. %s\n", temp->num, temp->command);
+    printf("%s\n", temp->command);
 }

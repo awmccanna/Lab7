@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../tokenize/makeArgs.h"
 
 
 struct history
@@ -15,12 +16,13 @@ struct history
     char * command;
     char ** tokCommand;
     int num;
+    int numCommand;
 };
 
 typedef struct history History;
 
 void cleanTypeHistory(void * ptr);
-void buildTypeHistory(char * com, char ** tCom, int numCom);
+void * buildTypeHistory(char * com);
 void printTypeHistory(void * passedIn);
 
 

@@ -167,20 +167,43 @@ void clearList(LinkedList * theList, void (*removeData)(void *))
 }
 
 
-void printList(const LinkedList * theList, void (*convertData)(void *))
+void printList(const LinkedList * theList, void (*convertData)(void *), int numPrint)
 {
 	if(theList == NULL)
 	{
 		perror("Null list in printList");
 		exit(-99);
 	}
-	
-	Node * cur = theList->head->next;
-	while(cur != NULL)
-	{
-		convertData(cur->data);
-		cur = cur->next;		
-	}
+	int totalNum = numPrint;
+    int numPosition = theList->size;
+    int printThisOne = 1;
+    if(totalNum > 0)
+    {
+        Node * cur = theList->head->next;
+        if(totalNum > theList->size)
+        {
+            while(cur->data != NULL)
+            {
+                printf("%d. ", printThisOne++);
+                numPosition--;
+                convertData(cur->data);
+                cur = cur->next;
+            }
+        }
+        else
+        {
+            while(totalNum > 0)
+            {
+                printf("%d. ", printThisOne++);
+                numPosition--;
+                convertData(cur->data);
+                cur = cur->next;
+                totalNum--;
+            }
+        }
+
+    }
+
 
 	
 	

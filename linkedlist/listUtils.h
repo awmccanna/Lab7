@@ -36,7 +36,7 @@
  *
  * @warning - Since FILE *fin is a pass through it is not checked.
  */
-Node * buildNode(FILE * fin, void *(*buildData)(FILE * in) );
+Node * buildNode(char * hist, void *(*buildData)(char * in) );
 
 
 /**
@@ -100,7 +100,7 @@ void sort(LinkedList * theList, int (*compare)(const void *, const void *));
  * @warning - The passed in int total is checked - exit(-99) if <= 0
  * @warning - Since FILE *fin is a pass through it is not checked.
  */
-void buildListTotal(LinkedList * myList, int total, FILE * fin, void * (*buildData)(FILE * in));
+void buildListTotal(LinkedList * myList, int total, char * fin, void * (*buildData)(char * in));
 
 
 #endif // LISTUTILS_H

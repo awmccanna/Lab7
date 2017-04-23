@@ -156,6 +156,6 @@ void clearList(LinkedList * theList, void (*removeData)(void *));
  *
  * @warning - The passed in LinkedList * theList is checked - if NULL "Empty List" is printed
  */
-void printList(const LinkedList * theList, void (*convertData)(void *));
+void printList(const LinkedList * theList, void (*convertData)(void *), int);
 
 #endif // LINKEDLIST_H
