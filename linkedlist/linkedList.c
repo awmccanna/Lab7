@@ -12,6 +12,7 @@ LinkedList * linkedList()
 	myList->tail = (Node *) calloc(1, sizeof(Node));
 	myList->head->next = myList->tail;
 	myList->tail->prev = myList->head;
+    myList->size = 0;
 	return myList;
 }
 
@@ -27,7 +28,6 @@ void addLast(LinkedList * theList, Node * nn)
 	nn->next = theList->tail;
 	nn->prev->next = nn;
 	theList->tail->prev = nn;
-
 	theList->size++;
 
 
@@ -174,6 +174,7 @@ void printList(const LinkedList * theList, void (*convertData)(void *), int numP
 		perror("Null list in printList");
 		exit(-99);
 	}
+
 	int totalNum = numPrint;
     int numPosition = theList->size;
     int printThisOne = 1;
@@ -192,7 +193,7 @@ void printList(const LinkedList * theList, void (*convertData)(void *), int numP
         }
         else
         {
-            while(totalNum > 0)
+            while(totalNum >= 0)
             {
                 printf("%d. ", printThisOne++);
                 numPosition--;

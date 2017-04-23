@@ -55,12 +55,6 @@ int main()
 
 
 
-
-
-
-
-
-
 	while(strcmp(s, "exit") != 0)
 	{
 		pipeCount = containsPipe(pipeCopy);
@@ -116,13 +110,13 @@ int main()
 
 		if (history->tail->prev->data != NULL)
 		{
-			char addHist[MAX];
+			char addHistAgain[MAX];
 			History *curHist = (History *) history->tail->prev->data;
-			strcpy(addHist, s);
-			strip(addHist);
-			if (strcmp(addHist, curHist->command) != 0)
+			strcpy(addHistAgain, s);
+			strip(addHistAgain);
+			if (strcmp(addHistAgain, curHist->command) != 0)
 			{
-				addLast(history, buildNode(addHist, buildTypeHistory));
+				addLast(history, buildNode(addHistAgain, buildTypeHistory));
 			}
 
 		}// end while

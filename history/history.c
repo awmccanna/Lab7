@@ -14,15 +14,8 @@ void cleanTypeHistory(void * ptr)
     }
 
     History * in = (History *) ptr;
-
     free(in->command);
-
-    int i = 0;
-    for(i; i < in->num; i++)
-    {
-        free(in->tokCommand[i]);
-    }
-    free(in->tokCommand);
+    free(in);
 
 }
 
@@ -32,9 +25,8 @@ void cleanTypeHistory(void * ptr)
 void * buildTypeHistory(char * com)
 {
     History * toReturn = (History *) calloc(1, sizeof(History));
-    toReturn->command = (char *) calloc(strlen(com), sizeof(char));
+    toReturn->command = (char *) calloc(strlen(com)+1, sizeof(char));
     strcpy(toReturn->command, com);
-    toReturn->num = makeargs(com, &toReturn->tokCommand);
 
     return (void *) toReturn;
 }

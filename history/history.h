@@ -14,9 +14,6 @@
 struct history
 {
     char * command;
-    char ** tokCommand;
-    int num;
-    int numCommand;
 };
 
 typedef struct history History;
