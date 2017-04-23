@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../utils/myUtils.h"
+#include "../alias/alias.h"
 
 /**
  * @brief The node structure.
@@ -160,5 +161,7 @@ void clearList(LinkedList * theList, void (*removeData)(void *));
 void printList(const LinkedList * theList, void (*convertData)(void *), int);
 
 void printList_file(const LinkedList * theList, void (*convertData)(void *, FILE *), int);
+
+char * findAlias(LinkedList * theList, char * toFind);
 
 #endif // LINKEDLIST_H

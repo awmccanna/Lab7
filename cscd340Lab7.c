@@ -19,6 +19,7 @@ int main()
 	int preCount = 0, postCount = 0;
 	char ** prePipe = NULL, ** postPipe = NULL;
 	LinkedList *history = linkedList();
+    LinkedList *alias = linkedList();
 	FILE * fin = openRC();
 	if(fin == NULL)
 	{
@@ -36,7 +37,7 @@ int main()
 
 	printf("command?: ");
 	fgets(s, MAX, stdin);
-
+    strip(s);
     if(strstr(s, "!!") != NULL)
     {
         printf("No previous commands\n");
@@ -45,7 +46,11 @@ int main()
     {
         printf("History by command number not implemented yet\n");
     }
-    strip(s);
+    char * aliasTest = findAlias(alias, s);
+    if(aliasTest != NULL)
+    {
+        strcpy(s, aliasTest);
+    }
 	strcpy(copy, s);
 	strcpy(pipeCopy, s);
 	strip(copy);
@@ -80,30 +85,64 @@ int main()
 			clean(argc, argv);
 			argv = NULL;
 		}
+
+
+
+
+
 		if (strlen(copy) >= 2)
 		{
 			if (copy[0] == 'c' && copy[1] == 'd') {
 				cd(copy);
 			}
 		}
+
+
+
+
+
+
+
+
 		if ((strstr(copy, "<") != NULL) || (strstr(copy, ">") != NULL))
 		{
 			printf("Redirection found\n");
 			//TODO redir
 		}
+
+
+
+
+
+
 		if (strstr(copy, "history") != NULL)
 		{
             printList(history, printTypeHistory, HISTCOUNT);
 		}
+
+
+
+
+
+
+        /**
+         * Alias checking code. If the word alias is found, this will execute
+         * attempt to create an alias for the command.
+         * Aliases are stored in a linkedList, which will be searched through
+         * if a call is made
+         */
 		if (strstr(copy, "alias") != NULL)
 		{
-			printf("Found alias\n");
-			//TODO alias stuff here
+            char aliasCopy[MAX];
+            strcpy(aliasCopy, s);
+            strip(aliasCopy);
+			addLast(alias, buildNode(aliasCopy, buildTypeAlias));
 		}
 
 
 		printf("command?: ");
 		fgets(s, MAX, stdin);
+        strip(s);
         if(strstr(s, "!!") != NULL)
         {
             if(history->size == 0)
@@ -119,6 +158,11 @@ int main()
         else if(strstr(s, "!") != NULL)
         {
             printf("History by command number not implemented yet\n");
+        }
+        aliasTest = findAlias(alias, s);
+        if(aliasTest != NULL)
+        {
+            strcpy(s, aliasTest);
         }
 		strcpy(copy, s);
 		strcpy(pipeCopy, s);
@@ -146,6 +190,8 @@ int main()
     printList_file(history, printTypeHistory_file, HISTFILECOUNT);
 	clearList(history, cleanTypeHistory);
 	free(history);
+    clearList(alias, cleanTypeAlias);
+    free(alias);
 	return 0;
 
 }// end main

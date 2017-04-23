@@ -93,11 +93,42 @@ int makeArgsEqual(char *s, char *** argv)
 
 	return count;
 
-}// end makeArgs
+}// end makeArgsEqual
 
 
 
+int makeArgsSingleQuote(char *s, char *** argv)
+{
+	char copy[MAX];
+	strcpy(copy, s);
+	unsigned int count = 0;
+	char * ph;
 
+	char * token = strtok_r(s, "'", &s);
+	while(token != NULL)
+	{
+		count++;
+		token = strtok_r(NULL, "'", &s);
+	}
+
+
+	*argv = (char **) calloc(count+1, sizeof(char*));
+	token = strtok_r(copy, "'", &ph);
+	(*argv)[0] = (char *) calloc(strlen(token)+1, sizeof(char));
+	strcpy((*argv)[0], token);
+
+	int x;
+	for(x = 1; x < count; x++)
+	{
+		token = strtok_r(NULL, "'", &ph);
+		(*argv)[x] = (char *) calloc(strlen(token)+1, sizeof(char));
+		strcpy((*argv)[x], token);
+
+	}
+
+	return count;
+
+}// end makeArgsEqual
 
 
 

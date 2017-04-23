@@ -152,6 +152,32 @@ void removeItem(LinkedList * theList, Node * nn, void (*removeData)(void *), int
 
 }
 
+char * findAlias(LinkedList * theList, char * toFind)
+{
+	Node * cur = theList->head->next;
+	Alias * temp = NULL;
+	while(cur != theList->tail)
+	{
+		temp = (Alias *) cur->data;
+		if(strcmp(temp->key, toFind) == 0)
+		{
+			return temp->value;
+		}
+		cur = cur->next;
+	}
+
+	return NULL;
+
+}
+
+
+
+
+
+
+
+
+
 
 void clearList(LinkedList * theList, void (*removeData)(void *))
 {
