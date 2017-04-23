@@ -206,11 +206,53 @@ void printList(const LinkedList * theList, void (*convertData)(void *), int numP
     }
 
 
-	
-	
+
+
 }
 
 
+void printList_file(const LinkedList * theList, void (*convertData)(void *, FILE *), int numPrint)
+{
+    if(theList == NULL)
+    {
+        perror("Null list in printList");
+        exit(-99);
+    }
+
+
+    FILE * fout = openRCHistory();
+
+
+    int totalNum = numPrint;
+    int numPosition = theList->size;
+    int printThisOne = 1;
+    if(totalNum > 0)
+    {
+        Node * cur = theList->head->next;
+        if(totalNum > theList->size)
+        {
+            while(cur->data != NULL)
+            {
+                fprintf(fout, "%d. ", printThisOne++);
+                numPosition--;
+                convertData(cur->data, fout);
+                cur = cur->next;
+            }
+        }
+        else
+        {
+            while(totalNum >= 0)
+            {
+                fprintf(fout, "%d. ", printThisOne++);
+                numPosition--;
+                convertData(cur->data, fout);
+                cur = cur->next;
+                totalNum--;
+            }
+        }
+        fclose(fout);
+    }
+}
 
 
 

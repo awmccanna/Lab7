@@ -40,3 +40,9 @@ void printTypeHistory(void * passedIn)
     History * temp = (History *) passedIn;
     printf("%s\n", temp->command);
 }
+
+void printTypeHistory_file(void * passedIn, FILE * fout)
+{
+    History * temp = (History *) passedIn;
+    fprintf(fout, "%s\n", temp->command);
+}

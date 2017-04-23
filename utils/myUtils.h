@@ -51,6 +51,12 @@ void strip(char *array);
  */
 FILE * openRC();
 
+/**
+ * Opens the history file and writes the history command linked list to it
+ * @return FILE *
+ */
+FILE * openRCHistory();
+
 
 /**
  * Called to read in HISTCOUNT and HISTFILECOUNT from .ushrc

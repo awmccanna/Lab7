@@ -66,6 +66,14 @@ FILE * openRC()
 	return fin;
 }
 
+FILE * openRCHistory()
+{
+	char rc[] = ".ushrc_history";
+	FILE * fout = NULL;
+	fout = fopen(rc, "w");
+	return fout;
+}
+
 void getCounts(FILE * fin, int * histCount, int * histFileCount)
 {
 	char temp1[MAX];

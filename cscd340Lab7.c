@@ -121,6 +121,9 @@ int main()
 
 		}// end while
 	}
+
+    printList_file(history, printTypeHistory_file, HISTFILECOUNT);
+
 	clearList(history, cleanTypeHistory);
 	free(history);
 	return 0;

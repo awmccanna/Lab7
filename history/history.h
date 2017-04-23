@@ -21,6 +21,7 @@ typedef struct history History;
 void cleanTypeHistory(void * ptr);
 void * buildTypeHistory(char * com);
 void printTypeHistory(void * passedIn);
+void printTypeHistory_file(void * passedIn, FILE * fout);
 
 
 
