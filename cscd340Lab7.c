@@ -46,6 +46,13 @@ int main()
     {
         printf("History by command number not implemented yet\n");
     }
+
+    /**
+     * This next block of code tests for an alias. It does this by looking
+     * through the alias linked list for a match to the given input string.
+     * If a match is found to the input (the key), then an associated value
+     * is returned.
+     */
     char * aliasTest = findAlias(alias, s);
     if(aliasTest != NULL)
     {
@@ -89,7 +96,9 @@ int main()
 
 
 
-
+        /**
+         * used to change directory if cd are the first two characters
+         */
 		if (strlen(copy) >= 2)
 		{
 			if (copy[0] == 'c' && copy[1] == 'd') {
@@ -112,9 +121,9 @@ int main()
 
 
 
-
-
-
+        /**
+         * prints the history linkedlist
+         */
 		if (strstr(copy, "history") != NULL)
 		{
             printList(history, printTypeHistory, HISTCOUNT);
@@ -159,6 +168,13 @@ int main()
         {
             printf("History by command number not implemented yet\n");
         }
+
+        /**
+         * This next block of code tests for an alias. It does this by looking
+         * through the alias linked list for a match to the given input string.
+         * If a match is found to the input (the key), then an associated value
+         * is returned.
+         */
         aliasTest = findAlias(alias, s);
         if(aliasTest != NULL)
         {
