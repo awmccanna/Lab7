@@ -9,7 +9,7 @@
 #include "./linkedlist/linkedList.h"
 #include "./linkedlist/listUtils.h"
 #include "./history/history.h"
-#include "./linkedlist/requiredIncludes.h"
+#include "./alias/alias.h"
 
 
 int main()
@@ -36,39 +36,43 @@ int main()
 
 	printf("command?: ");
 	fgets(s, MAX, stdin);
+
+    if(strstr(s, "!!") != NULL)
+    {
+        printf("No previous commands\n");
+    }
+    else if(strstr(s, "!") != NULL)
+    {
+        printf("History by command number not implemented yet\n");
+    }
+    strip(s);
 	strcpy(copy, s);
 	strcpy(pipeCopy, s);
-	strip(s);
 	strip(copy);
 	strip(pipeCopy);
 
 
 	//Add to history part here
-
-
     char addHist[MAX];
     strcpy(addHist, s);
     strip(addHist);
     addLast(history, buildNode(addHist, buildTypeHistory));
 
 
-
-
-
 	while(strcmp(s, "exit") != 0)
 	{
-		pipeCount = containsPipe(pipeCopy);
 
+		pipeCount = containsPipe(pipeCopy);
 		if (pipeCount > 0)
 		{
-
 			postPipe = parsePostPipe(pipeCopy, &postCount);
 			prePipe = parsePrePipe(pipeCopy, &preCount);
 			pipeIt(prePipe, postPipe);
 			clean(preCount, prePipe);
 			clean(postCount, postPipe);
 		}// end if pipeCount
-		else {
+		else
+        {
 			argc = makeargs(pipeCopy, &argv);
 			if (argc != -1)
 				forkIt(argv);
@@ -89,9 +93,7 @@ int main()
 		}
 		if (strstr(copy, "history") != NULL)
 		{
-			printf("Found history\n");
             printList(history, printTypeHistory, HISTCOUNT);
-
 		}
 		if (strstr(copy, "alias") != NULL)
 		{
@@ -102,12 +104,31 @@ int main()
 
 		printf("command?: ");
 		fgets(s, MAX, stdin);
+        if(strstr(s, "!!") != NULL)
+        {
+            if(history->size == 0)
+            {
+                printf("No previous commands\n");
+            }
+            else
+            {
+                History * temp = (History *) history->tail->prev->data;
+                strcpy(s, temp->command);
+            }
+        }
+        else if(strstr(s, "!") != NULL)
+        {
+            printf("History by command number not implemented yet\n");
+        }
 		strcpy(copy, s);
 		strcpy(pipeCopy, s);
 		strip(s);
 		strip(copy);
 		strip(pipeCopy);
 
+        /**
+         * Checking for duplicates before adding history
+         */
 		if (history->tail->prev->data != NULL)
 		{
 			char addHistAgain[MAX];
@@ -123,7 +144,6 @@ int main()
 	}
 
     printList_file(history, printTypeHistory_file, HISTFILECOUNT);
-
 	clearList(history, cleanTypeHistory);
 	free(history);
 	return 0;
