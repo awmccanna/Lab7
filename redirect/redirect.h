@@ -9,7 +9,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <unistd.h>
 #include <sys/wait.h>
 #include <sys/types.h>
 #include "../tokenize/makeArgs.h"
@@ -17,7 +16,7 @@
 
 
 void redirect(char * s);
-void redirectInput(char ** args, int type);
+void redirectInput(char **,char ** args, int type);
 
 
 

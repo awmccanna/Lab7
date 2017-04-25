@@ -7,7 +7,7 @@
 
 void redirect(char * s)
 {
-    printf("ATTEMPTING TO REDIRECT\n");
+
     char copy[MAX];
     strcpy(copy, s);
     strip(copy);
@@ -26,14 +26,19 @@ void redirect(char * s)
         type = 2;
     }
     int numArgs = makeArgsBang(copy, &args);
-    redirectInput(args, type);
+    char ** hope = NULL;
+    int testArgs = makeargs(args[0], &hope);
+
+
+
+    redirectInput(hope, args, type);
 
 
 
 
 
 
-
+    clean(testArgs, hope);
     clean(numArgs, args);
 
 }
@@ -43,72 +48,42 @@ void redirect(char * s)
 
 
 
-void redirectInput(char ** args, int type)
+void redirectInput(char ** hope, char ** args, int type)
 {
-    pid_t grandparentPID;
-    int status, readFD = 0, writeFD = 0;
-    FILE * fin = NULL;
-    FILE * fout = NULL;
-    if(type == 0)
-    {
-        readFD = openInputFileFD(args[1]);
-        writeFD = openOutputFileFD(args[2]);
-    }
-    else if(type == 1)
-    {
-        readFD = openInputFileFD(args[1]);
-    }
-    else if(type == 2)
-    {
-        writeFD = openOutputFileFD(args[1]);
-    }
-    printf("read: %d, write: %d\n", readFD, writeFD);
+    pid_t parentPID;
+    int status;
 
-    grandparentPID = fork();
-    if(grandparentPID != 0)
+
+    parentPID = fork();
+    if(parentPID != 0)
     {
-        waitpid(grandparentPID, &status, 0);
+        waitpid(parentPID, &status, 0);
     }
     else
     {
-        pid_t parentPID;
+        if(type == 0)
+        {
+            freopen(args[1], "r", stdin);
+            freopen(args[2], "w", stdout);
+        }
+        else if(type == 1)
+        {
+            freopen(args[1], "r", stdin);
+        }
+        else if(type == 2)
+        {
+            freopen(args[1], "w", stdout);
+        }
 
-
-        parentPID = fork();
-
-        if (parentPID != 0)
-        {//OUTPUT BLOCK
-            if(writeFD > 0) //This will execute if writeFD is > 0, aka we want
-            {               //to change where the output is going
-                dup2(1, writeFD);
-                close(writeFD);
-                if(args[2] != NULL)
-                    execvp(args[2], args);
-                else
-                    execvp(args[1], args);
-            }
-
-        }// end if AKA parent
-        else
-        {//INPUT BLOCK
-            if(readFD > 0)  //Same as above, this will execute only when we want
-            {               //to change the input source.
-
-                dup2(0, readFD);
-                close(readFD);
-                execvp(args[1], args);
-            }
-
-            exit(-1);
-        }// end else AKA child
+        execvp(hope[0], hope);
         exit(-1);
+
+
+
+
+
     }
 
-
-    //if(readFD != 0)
-      //  close(readFD);
-    //if(writeFD != 0)
-      //  close(writeFD);
 
 
 }

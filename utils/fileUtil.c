@@ -22,7 +22,7 @@ FILE * openInputFile_Prompt()
 
 int openInputFileFD(char * name)
 {
-    int in = open(name, O_RDONLY);
+    int in = open(name, O_RDONLY, S_IRWXU);
     if(in == -1)
     {
         perror("Invalid file open");
@@ -33,7 +33,7 @@ int openInputFileFD(char * name)
 
 int openOutputFileFD(char * name)
 {
-    int out = open(name, O_WRONLY | O_CREAT);
+    int out = open(name, O_WRONLY | O_CREAT, S_IRWXU);
     printf("out is %d\n", out);
     if(out == -1)
     {
