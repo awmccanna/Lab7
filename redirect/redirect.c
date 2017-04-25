@@ -63,7 +63,7 @@ void redirectInput(char ** args, int type)
         writeFD = openOutputFileFD(args[1]);
     }
     printf("read: %d, write: %d\n", readFD, writeFD);
-    /*
+
     grandparentPID = fork();
     if(grandparentPID != 0)
     {
@@ -72,13 +72,7 @@ void redirectInput(char ** args, int type)
     else
     {
         pid_t parentPID;
-        int fd[2], res;
-        res = pipe(fd);
 
-        if (res < 0) {
-            printf("Pipe Failure\n");
-            exit(-1);
-        }// end if
 
         parentPID = fork();
 
@@ -86,11 +80,12 @@ void redirectInput(char ** args, int type)
         {//OUTPUT BLOCK
             if(writeFD > 0) //This will execute if writeFD is > 0, aka we want
             {               //to change where the output is going
-                close(fd[1]);
-                close(0);
-                dup(fd[0]);
-                close(fd[0]);
-                //execvp(postPipe[0], postPipe);
+                dup2(1, writeFD);
+                close(writeFD);
+                if(args[2] != NULL)
+                    execvp(args[2], args);
+                else
+                    execvp(args[1], args);
             }
 
         }// end if AKA parent
@@ -98,11 +93,10 @@ void redirectInput(char ** args, int type)
         {//INPUT BLOCK
             if(readFD > 0)  //Same as above, this will execute only when we want
             {               //to change the input source.
-                close(fd[0]);
-                close(1);
-                dup(fd[1]);
-                close(fd[1]);
-                //execvp(prePipe[0], prePipe);
+
+                dup2(0, readFD);
+                close(readFD);
+                execvp(args[1], args);
             }
 
             exit(-1);
@@ -110,11 +104,11 @@ void redirectInput(char ** args, int type)
         exit(-1);
     }
 
-    */
-    if(readFD != 0)
-        close(readFD);
-    if(writeFD != 0)
-        close(writeFD);
+
+    //if(readFD != 0)
+      //  close(readFD);
+    //if(writeFD != 0)
+      //  close(writeFD);
 
 
 }
