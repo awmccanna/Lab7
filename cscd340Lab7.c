@@ -5,7 +5,8 @@
  *
  * ---Known issues---
  * ~Piping does not work with aliases
- *
+ * ~Cannot pipe multiple times
+ * ~Crashes on file not found during redirection of input
  *
  */
 
@@ -20,6 +21,7 @@
 #include "./history/history.h"
 #include "./alias/alias.h"
 #include "./utils/fileUtil.h"
+#include "./redirect/redirect.h"
 
 
 int main()
@@ -97,37 +99,54 @@ int main()
 	while(strcmp(s, "exit") != 0)
 	{
 
-		pipeCount = containsPipe(pipeCopy);
-		if (pipeCount > 0)
-		{
-			postPipe = parsePostPipe(pipeCopy, &postCount);
-			prePipe = parsePrePipe(pipeCopy, &preCount);
-			pipeIt(prePipe, postPipe);
-			clean(preCount, prePipe);
-			clean(postCount, postPipe);
-		}// end if pipeCount
-		else
+        /**
+         * Redirection block. calls the redirect() method
+         */
+        if ((strstr(copy, "<") != NULL) || (strstr(copy, ">") != NULL))
         {
-			argc = makeargs(pipeCopy, &argv);
-			if (argc != -1)
-				forkIt(argv);
-
-			clean(argc, argv);
-			argv = NULL;
-		}
-
-
+            redirect(s);
+        }
 
 
         /**
-         * used to change directory if cd are the first two characters
+         * if there was no redirection, the program will continue as normal
          */
-		if (strlen(copy) >= 2)
-		{
-			if (copy[0] == 'c' && copy[1] == 'd') {
-				cd(copy);
-			}
-		}
+        else
+        {
+            /**
+             * PIPE
+             */
+            pipeCount = containsPipe(pipeCopy);
+            if (pipeCount > 0)
+            {
+                postPipe = parsePostPipe(pipeCopy, &postCount);
+                prePipe = parsePrePipe(pipeCopy, &preCount);
+                pipeIt(prePipe, postPipe);
+                clean(preCount, prePipe);
+                clean(postCount, postPipe);
+            }// end if pipeCount
+            else
+            {
+                argc = makeargs(pipeCopy, &argv);
+                if (argc != -1)
+                    forkIt(argv);
+
+                clean(argc, argv);
+                argv = NULL;
+            }
+
+
+
+
+            /**CHANGE DIRECTORY
+             * used to change directory if cd are the first two characters
+             */
+            if (strlen(copy) >= 2)
+            {
+                if (copy[0] == 'c' && copy[1] == 'd') {
+                    cd(copy);
+                }
+            }
 
 
 
@@ -136,44 +155,50 @@ int main()
 
 
 
-		if ((strstr(copy, "<") != NULL) || (strstr(copy, ">") != NULL))
-		{
-			printf("Redirection found\n");
-			//TODO redir
-		}
 
 
+
+            /**HISTORY
+             * prints the history linkedlist
+             */
+            if (strstr(copy, "history") != NULL)
+            {
+                printList(history, printTypeHistory, HISTCOUNT);
+            }
+
+
+
+
+
+
+            /**ALIAS
+             * Alias checking code. If the word alias is found, this will execute
+             * attempt to create an alias for the command.
+             * Aliases are stored in a linkedList, which will be searched through
+             * if a call is made
+             */
+            if (strstr(copy, "alias") != NULL)
+            {
+                char aliasCopy[MAX];
+                strcpy(aliasCopy, s);
+                strip(aliasCopy);
+                addLast(alias, buildNode(aliasCopy, buildTypeAlias));
+            }
+
+
+
+
+
+
+
+        }
 
         /**
-         * prints the history linkedlist
+         * STARTING THE WHOLE PROCESS OVER AGAIN
          */
-		if (strstr(copy, "history") != NULL)
-		{
-            printList(history, printTypeHistory, HISTCOUNT);
-		}
 
-
-
-
-
-
-        /**
-         * Alias checking code. If the word alias is found, this will execute
-         * attempt to create an alias for the command.
-         * Aliases are stored in a linkedList, which will be searched through
-         * if a call is made
-         */
-		if (strstr(copy, "alias") != NULL)
-		{
-            char aliasCopy[MAX];
-            strcpy(aliasCopy, s);
-            strip(aliasCopy);
-			addLast(alias, buildNode(aliasCopy, buildTypeAlias));
-		}
-
-
-		printf("command?: ");
-		fgets(s, MAX, stdin);
+        printf("command?: ");
+        fgets(s, MAX, stdin);
         strip(s);
         if(strstr(s, "!!") != NULL)
         {
@@ -205,8 +230,8 @@ int main()
                     printf("Uh oh, went too far.\n");
                 else
                     h = (History *) cur->data;
-
-                strcpy(s, h->command);
+                if(h->command != NULL)
+                    strcpy(s, h->command);
             }
             else
             {
@@ -228,11 +253,11 @@ int main()
         {
             strcpy(s, aliasTest);
         }
-		strcpy(copy, s);
-		strcpy(pipeCopy, s);
-		strip(s);
-		strip(copy);
-		strip(pipeCopy);
+        strcpy(copy, s);
+        strcpy(pipeCopy, s);
+        strip(s);
+        strip(copy);
+        strip(pipeCopy);
 
         /**
          * Checking for duplicates before adding history

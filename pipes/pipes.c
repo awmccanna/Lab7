@@ -104,7 +104,7 @@ void pipeIt(char ** prePipe, char ** postPipe)
         pid_t pid;
         int fd[2], res;
 
-        res = pipe(fd);
+        res = pipe(fd);//puts the next two free file descriptors into fd
 
         if (res < 0) {
             printf("Pipe Failure\n");

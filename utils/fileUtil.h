@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
 
 #define MAX 100
 
@@ -72,5 +73,8 @@ int countRecords(FILE * fin, int linesPerRecord);
  * @warning - The number of records read from the file is checked - exit(-99) if <= 0
  */
 int readTotal(FILE * fin);
+
+int openInputFileFD(char * name);
+int openOutputFileFD(char * name);
 
 #endif // FILEUTIL_H

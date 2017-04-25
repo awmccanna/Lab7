@@ -20,6 +20,32 @@ FILE * openInputFile_Prompt()
    return fin;
 }// end openInputFile_Prompt
 
+int openInputFileFD(char * name)
+{
+    int in = open(name, O_RDONLY);
+    if(in == -1)
+    {
+        perror("Invalid file open");
+        exit(-1);
+    }// end while
+    return in;
+}// end openInputFile
+
+int openOutputFileFD(char * name)
+{
+    int out = open(name, O_WRONLY | O_CREAT);
+    printf("out is %d\n", out);
+    if(out == -1)
+    {
+        perror("Invalid file open");
+        exit(-1);
+    }// end while
+    return out;
+}// end openInputFile
+
+
+
+
 FILE * openInputFileType_Prompt(char * type)
 {
    char temp[100];

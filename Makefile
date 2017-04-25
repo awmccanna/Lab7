@@ -2,8 +2,8 @@ CC=gcc
 FLAGS= -g
 
 
-lab7:	cscd340Lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./changeDir/changeDir.o ./linkedlist/linkedList.o ./linkedlist/listUtils.o ./history/history.o ./alias/alias.o ./utils/fileUtil.o
-	${CC} ${FLAGS} cscd340Lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./changeDir/changeDir.o ./linkedlist/linkedList.o ./linkedlist/listUtils.o ./history/history.o ./alias/alias.o ./utils/fileUtil.o -o lab7
+lab7:	cscd340Lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./changeDir/changeDir.o ./linkedlist/linkedList.o ./linkedlist/listUtils.o ./history/history.o ./alias/alias.o ./utils/fileUtil.o ./redirect/redirect.o
+	${CC} ${FLAGS} cscd340Lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./changeDir/changeDir.o ./linkedlist/linkedList.o ./linkedlist/listUtils.o ./history/history.o ./alias/alias.o ./utils/fileUtil.o ./redirect/redirect.o -o lab7
 
 makeArgs.o:	./tokenize/makeArgs.c ./tokenize/makeArgs.h
 	${CC} ${FLAGS} -c ./tokenize/makeArgs.c
@@ -35,6 +35,9 @@ history.o: 	./history/history.c ./history/history.h
 alias.o: 	./alias/alias.c ./alias/alias.h
 	${CC} ${FLAGS} -c ./alias/alias.c
 
+redirect.o:	./redirect/redirect.c ./redirect/redirect.h
+	${CC} ${FLAGS} -c ./redirect/redirect.c
+
 clean:
 	rm ./pipes/pipes.o	
 	rm ./utils/myUtils.o
@@ -46,5 +49,6 @@ clean:
 	rm ./linkedlist/listUtils.o
 	rm ./history/history.o
 	rm ./alias/alias.o
+	rm ./redirect/redirect.o
 	rm lab7
 
