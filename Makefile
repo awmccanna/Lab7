@@ -2,14 +2,17 @@ CC=gcc
 FLAGS= -g
 
 
-lab7:	cscd340Lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./changeDir/changeDir.o ./linkedlist/linkedList.o ./linkedlist/listUtils.o ./history/history.o ./alias/alias.o
-	${CC} ${FLAGS} cscd340Lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./changeDir/changeDir.o ./linkedlist/linkedList.o ./linkedlist/listUtils.o ./history/history.o ./alias/alias.o -o lab7
+lab7:	cscd340Lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./changeDir/changeDir.o ./linkedlist/linkedList.o ./linkedlist/listUtils.o ./history/history.o ./alias/alias.o ./utils/fileUtil.o
+	${CC} ${FLAGS} cscd340Lab7.c ./tokenize/makeArgs.o ./utils/myUtils.o ./process/process.o ./pipes/pipes.o ./changeDir/changeDir.o ./linkedlist/linkedList.o ./linkedlist/listUtils.o ./history/history.o ./alias/alias.o ./utils/fileUtil.o -o lab7
 
 makeArgs.o:	./tokenize/makeArgs.c ./tokenize/makeArgs.h
 	${CC} ${FLAGS} -c ./tokenize/makeArgs.c
 
-myUtils.o:	./utils/myUtils.o ./utils/myUtils.h
+myUtils.o:	./utils/myUtils.c ./utils/myUtils.h
 	${CC} ${FLAGS} -c ./utils/myUtils.c
+
+fileUtil.o:	./utils/fileUtil.c ./utils/fileUtil.h
+	${CC} ${FLAGS} -c ./utils/fileUtil.c
 
 process.o:	./process/process.c ./process/process.h
 	${CC} ${FLAGS} -c ./process/process.c	
@@ -35,6 +38,7 @@ alias.o: 	./alias/alias.c ./alias/alias.h
 clean:
 	rm ./pipes/pipes.o	
 	rm ./utils/myUtils.o
+	rm ./utils/fileUtil.o
 	rm ./process/process.o
 	rm ./tokenize/makeArgs.o
 	rm ./changeDir/changeDir.o

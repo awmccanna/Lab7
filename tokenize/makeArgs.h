@@ -15,5 +15,6 @@ void printargs(int argc, char **argv);
 int makeargs(char *s, char *** argv);
 int makeArgsEqual(char *s, char *** argv);
 int makeArgsSingleQuote(char *s, char *** argv);
+int makeArgsBang(char *s, char *** argv);
 
 #endif

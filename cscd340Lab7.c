@@ -1,6 +1,15 @@
-//
-// Created by awmccanna on 4/20/17.
-//
+/**
+ * Alex McCanna
+ * CSCD 340 Lab 7
+ * Shell
+ *
+ * ---Known issues---
+ * ~Piping does not work with aliases
+ *
+ *
+ */
+
+
 #include "./pipes/pipes.h"
 #include "./utils/myUtils.h"
 #include "./process/process.h"
@@ -10,17 +19,19 @@
 #include "./linkedlist/listUtils.h"
 #include "./history/history.h"
 #include "./alias/alias.h"
+#include "./utils/fileUtil.h"
 
 
 int main()
 {
-	int argc, pipeCount, HISTCOUNT, HISTFILECOUNT;
-	char **argv = NULL, s[MAX], copy[MAX], pipeCopy[MAX];
+	int argc, pipeCount, lineCount, HISTCOUNT, HISTFILECOUNT;
+	char **argv = NULL, s[MAX], copy[MAX], pipeCopy[MAX], a[MAX], lineIn[MAX];
 	int preCount = 0, postCount = 0;
 	char ** prePipe = NULL, ** postPipe = NULL;
 	LinkedList *history = linkedList();
     LinkedList *alias = linkedList();
 	FILE * fin = openRC();
+    int linesLeft = 0;
 	if(fin == NULL)
 	{
 		HISTCOUNT = 100;
@@ -28,11 +39,23 @@ int main()
 	}
 	else
 	{
+        lineCount = countRecords(fin, 1);
 		getCounts(fin, &HISTCOUNT, &HISTFILECOUNT);
+
+        for(linesLeft; linesLeft < lineCount-2; linesLeft++)
+        {
+            fgets(lineIn, MAX, fin);
+            strip(lineIn);
+            if(lineIn[0] != '\0' && lineIn[0] != '\n')
+            {
+                strcpy(a, lineIn);
+                strip(a);
+                addLast(alias, buildNode(a, buildTypeAlias));
+            }
+
+        }
+
 	}
-
-	//printf("HISTCOUNT: %d, HISTFILECOUNT: %d\n", HISTCOUNT, HISTFILECOUNT);
-
 	fclose(fin);
 
 	printf("command?: ");
@@ -40,11 +63,11 @@ int main()
     strip(s);
     if(strstr(s, "!!") != NULL)
     {
-        printf("No previous commands\n");
+        printf("No history yet.\n");
     }
     else if(strstr(s, "!") != NULL)
     {
-        printf("History by command number not implemented yet\n");
+        printf("No history yet.\n");
     }
 
     /**
@@ -166,7 +189,32 @@ int main()
         }
         else if(strstr(s, "!") != NULL)
         {
-            printf("History by command number not implemented yet\n");
+            char ** histArgs = NULL;
+            History * h = NULL;
+            int histNum = makeArgsBang(s, &histArgs);
+            int numToWalk = atoi(histArgs[0]);
+            if(numToWalk <= history->size)
+            {
+                int i = 1;
+                Node * cur = history->head->next;
+                for(i; i < numToWalk; i++)
+                {
+                    cur = cur->next;
+                }
+                if(cur->data == NULL || cur == history->tail)
+                    printf("Uh oh, went too far.\n");
+                else
+                    h = (History *) cur->data;
+
+                strcpy(s, h->command);
+            }
+            else
+            {
+                printf("Command not possible\n");
+            }
+
+            clean(histNum, histArgs);
+
         }
 
         /**
